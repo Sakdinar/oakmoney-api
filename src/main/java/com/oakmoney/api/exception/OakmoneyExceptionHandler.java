@@ -23,15 +23,22 @@ public class OakmoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	@Autowired
 	private MessageSource messageSource;
 	
+	/**
+	 * 	Captura excecao de erro na leitura da requisicao
+	 * 	geralmente trata: 'bad request'
+	 */
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		
+
 		String mensagemUsuario = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = ex.getCause().toString();
 		return handleExceptionInternal(ex, new Erro(mensagemUsuario, mensagemDesenvolvedor), headers, status, request);
 	}
 	
+	/**
+	 * 	Captura excecao de argumentos invalidos
+	 */
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
