@@ -1,9 +1,6 @@
 package com.oakmoney.api.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -11,23 +8,11 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "categoria")
-public class Categoria {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long codigo;
+public class Categoria extends AbstractModel {
 
 	@NotBlank
 	@Size(min = 3, max = 20)
 	private String nome;
-
-	public Long getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
 
 	public String getNome() {
 		return nome;
@@ -41,7 +26,7 @@ public class Categoria {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		result = prime * result + ((getCodigo() == null) ? 0 : getCodigo().hashCode());
 		return result;
 	}
 
@@ -54,10 +39,10 @@ public class Categoria {
 		if (getClass() != obj.getClass())
 			return false;
 		Categoria other = (Categoria) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
+		if (getCodigo() == null) {
+			if (other.getCodigo() != null)
 				return false;
-		} else if (!codigo.equals(other.codigo))
+		} else if (!getCodigo().equals(other.getCodigo()))
 			return false;
 		return true;
 	}
