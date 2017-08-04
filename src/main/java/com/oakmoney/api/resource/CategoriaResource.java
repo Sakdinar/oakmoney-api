@@ -47,4 +47,10 @@ public class CategoriaResource extends AbstractResource {
 		return null == categoria  ? ResponseEntity.notFound().build() : ResponseEntity.ok(categoria);
 	}
 	
+	@DeleteMapping("/{codigo}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long codigo) {
+		categoriaRepository.delete(codigo);
+	}
+	
 }
