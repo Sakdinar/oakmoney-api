@@ -1,20 +1,23 @@
 package com.oakmoney.api.resource;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oakmoney.api.event.RecursoCriadoEvent;
 import com.oakmoney.api.model.Categoria;
 import com.oakmoney.api.repository.CategoriaRepository;
 
@@ -34,8 +37,8 @@ public class CategoriaResource extends AbstractResource {
 	@PostMapping
 	public ResponseEntity<Categoria> criarCategoria(@Valid @RequestBody Categoria categoria, HttpServletResponse httpResponse) {
 		Categoria categoriaSalva = categoriaRepository.save(categoria);
-		URI uri = getURI(categoriaSalva);
-		return ResponseEntity.created(uri).body(categoriaSalva);
+		getPublisher().publishEvent(new RecursoCriadoEvent(this, httpResponse, categoriaSalva.getCodigo()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
 	}
 	
 	@GetMapping("/{codigo}")

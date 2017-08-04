@@ -1,11 +1,12 @@
 package com.oakmoney.api.resource;
 
-import java.net.URI;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oakmoney.api.event.RecursoCriadoEvent;
 import com.oakmoney.api.model.Pessoa;
 import com.oakmoney.api.repository.PessoaRepository;
 
@@ -37,10 +39,10 @@ public class PessoaResource extends AbstractResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Pessoa> novaPessoa(@Valid @RequestBody Pessoa pessoa) {
+	public ResponseEntity<Pessoa> novaPessoa(@Valid @RequestBody Pessoa pessoa, HttpServletResponse httpResponse) {
 		Pessoa pessoaSalva = pessoaRepository.save(pessoa);
-		URI uri = getURI(pessoaSalva);
-		return ResponseEntity.created(uri).body(pessoaSalva);
+		getPublisher().publishEvent(new RecursoCriadoEvent(this, httpResponse, pessoaSalva.getCodigo()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
 	}
 	
 }
