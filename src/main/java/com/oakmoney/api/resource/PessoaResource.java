@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oakmoney.api.event.RecursoCriadoEvent;
 import com.oakmoney.api.model.Pessoa;
 import com.oakmoney.api.repository.PessoaRepository;
+import com.oakmoney.api.service.PessoaService;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -27,6 +29,11 @@ public class PessoaResource extends AbstractResource {
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
+
+	@Autowired
+	private PessoaService pessoaService;
+	
+	
 	
 	@GetMapping
 	public ResponseEntity<List<Pessoa>> findAll() {
@@ -51,6 +58,12 @@ public class PessoaResource extends AbstractResource {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long codigo) {
 		pessoaRepository.delete(codigo);
+	}
+	
+	@PutMapping("/{codigo}")
+	public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
+		Pessoa pessaoSalva = pessoaService.atualizar(codigo, pessoa);
+		return ResponseEntity.ok(pessaoSalva);
 	}
 	
 }
