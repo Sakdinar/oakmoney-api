@@ -5,9 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,13 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oakmoney.api.event.RecursoCriadoEvent;
 import com.oakmoney.api.model.Categoria;
 import com.oakmoney.api.repository.CategoriaRepository;
+import com.oakmoney.api.service.CategoriaService;
 
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaResource extends AbstractResource {
 	
 	@Autowired
-	CategoriaRepository categoriaRepository;
+	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private CategoriaService categoriaService;
 	
 	@GetMapping
 	public ResponseEntity<List<Categoria>> obterTodas() {
@@ -58,12 +60,7 @@ public class CategoriaResource extends AbstractResource {
 	
 	@PutMapping("/{codigo}")
 	public ResponseEntity<Categoria> atualizar(@PathVariable Long codigo, @Valid @RequestBody Categoria categoria) {
-		Categoria categoriaSalva = categoriaRepository.findOne(codigo);
-		if (null == categoriaSalva) {
-			throw new EmptyResultDataAccessException(1);
-		}
-		BeanUtils.copyProperties(categoria, categoriaSalva, "codigo");
-		categoriaRepository.save(categoriaSalva);
+		Categoria categoriaSalva = categoriaService.atualizar(codigo, categoria);
 		return ResponseEntity.ok(categoriaSalva);
 	}
 	
