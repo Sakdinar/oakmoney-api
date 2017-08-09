@@ -10,6 +10,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.oakmoney.api.enumeration.TipoLancamento;
 
@@ -17,25 +21,32 @@ import com.oakmoney.api.enumeration.TipoLancamento;
 @Table(name = "lancamento")
 public class Lancamento extends AbstractModel {
 
+	@NotBlank
+	@Size(min = 3, max = 50)
 	private String descricao;
 
+	@NotNull
 	@Column(name = "data_vencimento")
 	private LocalDate dataVencimento;
 
 	@Column(name = "data_pagamento")
 	private LocalDate dataPagamento;
 
+	@NotNull
 	private BigDecimal valor;
 
 	private String observacao;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipo;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "codigo_categoria")
 	private Categoria categoria;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "codigo_pessoa")
 	private Pessoa pessoa;
