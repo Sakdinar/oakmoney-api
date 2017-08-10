@@ -3,10 +3,13 @@ package com.oakmoney.api.model;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "pessoa")
@@ -22,6 +25,12 @@ public class Pessoa extends AbstractModel {
 	@Embedded
 	private Endereco endereco;
 
+	@JsonIgnore
+	@Transient
+	public boolean isInativo() {
+		return !getAtivo();
+	}
+	
 	public Boolean getAtivo() {
 		return ativo;
 	}
