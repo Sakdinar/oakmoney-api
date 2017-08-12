@@ -23,6 +23,7 @@ import com.oakmoney.api.event.RecursoCriadoEvent;
 import com.oakmoney.api.exception.OakmoneyExceptionHandler.Erro;
 import com.oakmoney.api.model.Lancamento;
 import com.oakmoney.api.repository.LancamentoRepository;
+import com.oakmoney.api.repository.filter.LancamentoFilter;
 import com.oakmoney.api.service.LancamentoService;
 import com.oakmoney.api.service.exception.PessoaInexistenteOuInativaException;
 
@@ -40,13 +41,8 @@ public class LancamentoResource extends AbstractResource {
 	private MessageSource messageSource;
 	
 	@GetMapping
-	public ResponseEntity<List<Lancamento>> findByFilter() {
-		return null;
-	}
-	
-	@GetMapping
-	public ResponseEntity<List<Lancamento>> buscarTodos() {
-		List<Lancamento> lancamentos = lancamentoRepository.findAll();
+	public ResponseEntity<List<Lancamento>> findByFilter(LancamentoFilter filter) {
+		List<Lancamento> lancamentos = lancamentoRepository.filtrar(filter);
 		return null != lancamentos && !lancamentos.isEmpty() ? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
 	}
 	
