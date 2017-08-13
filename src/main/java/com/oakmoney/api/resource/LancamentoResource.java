@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,9 +44,9 @@ public class LancamentoResource extends AbstractResource {
 	private MessageSource messageSource;
 	
 	@GetMapping
-	public ResponseEntity<List<Lancamento>> findByFilter(LancamentoFilter filter) {
-		List<Lancamento> lancamentos = lancamentoRepository.filtrar(filter);
-		return null != lancamentos && !lancamentos.isEmpty() ? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
+	public ResponseEntity<Page<Lancamento>> findByFilter(LancamentoFilter filter, Pageable pageable) {
+		Page<Lancamento> lancamentos = lancamentoRepository.filtrar(filter, pageable);
+		return null != lancamentos && lancamentos.hasContent() ? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/{codigo}")
