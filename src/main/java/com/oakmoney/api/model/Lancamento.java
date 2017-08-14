@@ -21,6 +21,8 @@ import com.oakmoney.api.enumeration.TipoLancamento;
 @Table(name = "lancamento")
 public class Lancamento extends AbstractModel {
 
+	private static final long serialVersionUID = 2590421201600066414L;
+
 	@NotBlank
 	@Size(min = 3, max = 50)
 	private String descricao;

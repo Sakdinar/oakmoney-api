@@ -10,6 +10,8 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "categoria")
 public class Categoria extends AbstractModel {
 
+	private static final long serialVersionUID = -6680707148717775885L;
+	
 	@NotBlank
 	@Size(min = 3, max = 20)
 	private String nome;

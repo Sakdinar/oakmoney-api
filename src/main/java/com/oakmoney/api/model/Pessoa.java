@@ -15,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "pessoa")
 public class Pessoa extends AbstractModel {
 	
+	private static final long serialVersionUID = 2721361187367199915L;
+
 	@NotNull
 	private Boolean ativo;
 	
