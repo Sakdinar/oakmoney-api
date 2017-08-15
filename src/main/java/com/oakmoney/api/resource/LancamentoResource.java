@@ -28,6 +28,7 @@ import com.oakmoney.api.exception.OakmoneyExceptionHandler.Erro;
 import com.oakmoney.api.model.Lancamento;
 import com.oakmoney.api.repository.LancamentoRepository;
 import com.oakmoney.api.repository.filter.LancamentoFilter;
+import com.oakmoney.api.repository.projection.ResumoLancamento;
 import com.oakmoney.api.service.LancamentoService;
 import com.oakmoney.api.service.exception.PessoaInexistenteOuInativaException;
 
@@ -47,7 +48,13 @@ public class LancamentoResource extends AbstractResource {
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public ResponseEntity<Page<Lancamento>> findByFilter(LancamentoFilter filter, Pageable pageable) {
-		Page<Lancamento> lancamentos = lancamentoRepository.filtrar(filter, pageable);
+		Page<Lancamento> lancamentos = lancamentoRepository.findByFilter(filter, pageable);
+		return null != lancamentos && lancamentos.hasContent() ? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
+	}
+	@GetMapping(params = "resumo")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public ResponseEntity<Page<ResumoLancamento>> resumeByFilter(LancamentoFilter filter, Pageable pageable) {
+		Page<ResumoLancamento> lancamentos = lancamentoRepository.resumeByFilter(filter, pageable);
 		return null != lancamentos && lancamentos.hasContent() ? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
 	}
 	
