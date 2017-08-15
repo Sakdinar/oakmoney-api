@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import com.oakmoney.api.config.property.OakmoneyApiProperty;
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -19,6 +21,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	@Autowired
+	private OakmoneyApiProperty oakmoneyApiProperty; 
 	
 	/**
 	 * Define credenciais do CLIENT
@@ -30,7 +34,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 			.secret("angular")
 			.scopes("read","write")
 			.authorizedGrantTypes("password", "refresh_token")
-			.accessTokenValiditySeconds(1800) //TODO: alterar em producao
+			.accessTokenValiditySeconds(oakmoneyApiProperty.getSeguranca().getAccessTokenValiditySeconds())
 			.refreshTokenValiditySeconds(3600 * 24);
 	}
 	
