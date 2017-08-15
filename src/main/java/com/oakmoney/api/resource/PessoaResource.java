@@ -1,11 +1,11 @@
 package com.oakmoney.api.resource;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oakmoney.api.event.RecursoCriadoEvent;
 import com.oakmoney.api.model.Pessoa;
 import com.oakmoney.api.repository.PessoaRepository;
+import com.oakmoney.api.repository.filter.PessoaFilter;
 import com.oakmoney.api.service.PessoaService;
 
 @RestController
@@ -36,9 +37,9 @@ public class PessoaResource extends AbstractResource {
 	
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
-	public ResponseEntity<List<Pessoa>> findAll() {
-		List<Pessoa> pessoas = pessoaRepository.findAll();
-		return null != pessoas && !pessoas.isEmpty() ? ResponseEntity.ok(pessoas) : ResponseEntity.noContent().build();
+	public ResponseEntity<Page<Pessoa>> findAll(PessoaFilter filter, Pageable pageable) {
+		Page<Pessoa> pessoas = pessoaRepository.findByFilter(filter, pageable);
+		return null != pessoas && pessoas.hasContent() ? ResponseEntity.ok(pessoas) : ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/{codigo}")
