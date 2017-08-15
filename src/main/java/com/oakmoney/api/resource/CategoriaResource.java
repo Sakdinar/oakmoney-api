@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,12 +35,14 @@ public class CategoriaResource extends AbstractResource {
 	private CategoriaService categoriaService;
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	public ResponseEntity<List<Categoria>> obterTodas() {
 		List<Categoria> lista = categoriaRepository.findAll();
 		return null == lista || lista.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(lista);
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Categoria> criarCategoria(@Valid @RequestBody Categoria categoria, HttpServletResponse httpResponse) {
 		Categoria categoriaSalva = categoriaRepository.save(categoria);
 		getPublisher().publishEvent(new RecursoCriadoEvent(this, httpResponse, categoriaSalva.getCodigo()));
@@ -47,6 +50,7 @@ public class CategoriaResource extends AbstractResource {
 	}
 	
 	@GetMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Categoria> getCategoria(@PathVariable Long codigo) {
 		Categoria categoria = categoriaRepository.findOne(codigo);
 		return null == categoria  ? ResponseEntity.notFound().build() : ResponseEntity.ok(categoria);
@@ -54,11 +58,13 @@ public class CategoriaResource extends AbstractResource {
 	
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_DELETAR_CATEGORIA') and #oauth2.hasScope('write')")
 	public void remover(@PathVariable Long codigo) {
 		categoriaRepository.delete(codigo);
 	}
 	
 	@PutMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Categoria> atualizar(@PathVariable Long codigo, @Valid @RequestBody Categoria categoria) {
 		Categoria categoriaSalva = categoriaService.atualizar(codigo, categoria);
 		return ResponseEntity.ok(categoriaSalva);

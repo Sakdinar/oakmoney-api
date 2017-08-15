@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,18 +45,21 @@ public class LancamentoResource extends AbstractResource {
 	private MessageSource messageSource;
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public ResponseEntity<Page<Lancamento>> findByFilter(LancamentoFilter filter, Pageable pageable) {
 		Page<Lancamento> lancamentos = lancamentoRepository.filtrar(filter, pageable);
 		return null != lancamentos && lancamentos.hasContent() ? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public ResponseEntity<Lancamento> obterPeloCodigo(@PathVariable Long codigo) {
 		Lancamento lancamento = lancamentoRepository.findOne(codigo);
 		return null != lancamento ? ResponseEntity.ok(lancamento) : ResponseEntity.notFound().build();
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and #oauth2.hasScope('write')")
 	public ResponseEntity<Lancamento> novoLancamento(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) {
 		Lancamento lancamentoSalvo = lancamentoService.salvar(lancamento);
 		getPublisher().publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getCodigo()));
@@ -63,6 +67,7 @@ public class LancamentoResource extends AbstractResource {
 	}
 	
 	@DeleteMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_LANCAMENTO') and #oauth2.hasScope('write')")
 	public ResponseEntity<Lancamento> removerLancamento(@PathVariable Long codigo) {
 		lancamentoRepository.delete(codigo);
 		return ResponseEntity.noContent().build();
