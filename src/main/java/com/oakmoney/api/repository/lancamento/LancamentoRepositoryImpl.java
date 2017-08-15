@@ -109,6 +109,12 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		Predicate[] predicates = criarRestricoes(lancamentoFilter, builder, root);
 		criteria.where(predicates);
 		
+		List<Order> orderList = new ArrayList<Order>();
+		orderList.add(builder.asc(root.get(Lancamento_.dataVencimento)));
+		orderList.add(builder.asc(root.get(Lancamento_.tipo)));
+		orderList.add(builder.asc(root.get(Lancamento_.categoria).get(Categoria_.nome)));
+		criteria.orderBy(orderList);
+		
 		TypedQuery<ResumoLancamento> query = entityManager.createQuery(criteria);
 		restricaoPaginacaoResumo(query, pageable);
 		
