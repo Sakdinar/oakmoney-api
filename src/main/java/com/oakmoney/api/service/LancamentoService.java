@@ -1,6 +1,8 @@
 package com.oakmoney.api.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import com.oakmoney.api.model.Lancamento;
@@ -25,6 +27,15 @@ public class LancamentoService {
 		}
 		
 		return lancamentoRepository.save(lancamento);
+	}
+	
+	public Lancamento atualizar(Long codigo, Lancamento lancamento) {
+		Lancamento lancamentoSalvo = lancamentoRepository.findOne(codigo);
+		if (null == lancamentoSalvo) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		BeanUtils.copyProperties(lancamento, lancamentoSalvo, "codigo");
+		return lancamentoRepository.save(lancamentoSalvo);
 	}
 	
 }
