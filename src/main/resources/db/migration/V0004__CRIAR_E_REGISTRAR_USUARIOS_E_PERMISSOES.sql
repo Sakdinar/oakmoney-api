@@ -1,12 +1,12 @@
 CREATE TABLE usuario (
-	codigo BIGINT(20) PRIMARY KEY,
+	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
 	senha VARCHAR(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE permissao (
-	codigo BIGINT(20) PRIMARY KEY,
+	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
 	descricao VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -19,7 +19,7 @@ CREATE TABLE usuario_permissao (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO usuario (codigo, nome, email, senha) values (1, 'Administrador', 'admin@oakmoney.com', '$2a$10$X607ZPhQ4EgGNaYKt3n4SONjIv9zc.VMWdEuhCuba7oLAL5IvcL5.');
-INSERT INTO usuario (codigo, nome, email, senha) values (2, 'Rebeka Costa', 'rebeka@oakmoney.com', '$2a$10$rAdW322.9WmwLeHAAZTzvu/I2dVPUYH0uq0iWOCmfVIFlkysQnd4y');
+INSERT INTO usuario (codigo, nome, email, senha) values (2, 'Rebeka Costa', 'rebeka_502@gmail.com', '$2a$10$rAdW322.9WmwLeHAAZTzvu/I2dVPUYH0uq0iWOCmfVIFlkysQnd4y');
 
 INSERT INTO permissao (codigo, descricao) values (1, 'ROLE_CADASTRAR_CATEGORIA');
 INSERT INTO permissao (codigo, descricao) values (2, 'ROLE_PESQUISAR_CATEGORIA');
@@ -31,6 +31,7 @@ INSERT INTO permissao (codigo, descricao) values (5, 'ROLE_PESQUISAR_PESSOA');
 INSERT INTO permissao (codigo, descricao) values (6, 'ROLE_CADASTRAR_LANCAMENTO');
 INSERT INTO permissao (codigo, descricao) values (7, 'ROLE_REMOVER_LANCAMENTO');
 INSERT INTO permissao (codigo, descricao) values (8, 'ROLE_PESQUISAR_LANCAMENTO');
+INSERT INTO permissao (codigo, descricao) values (9, 'ROLE_REMOVER_CATEGORIA');
 
 -- admin
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 1);
@@ -41,8 +42,9 @@ INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 5);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 6);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 7);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 8);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 9);
 
--- maria
+-- rebeka
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 2);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 5);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 8);
