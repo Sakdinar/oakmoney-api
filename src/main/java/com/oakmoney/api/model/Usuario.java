@@ -8,6 +8,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "usuario")
@@ -15,8 +18,14 @@ public class Usuario extends AbstractModel {
 
 	private static final long serialVersionUID = 1019278027700504878L;
 	
+	@NotBlank
+	@Size(min=3, max=50)
 	private String nome;
+	@NotBlank
+	@Size(min=5, max=50)
 	private String email;
+	@NotBlank
+	@Size(min=6, max=150)
 	private String senha;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
