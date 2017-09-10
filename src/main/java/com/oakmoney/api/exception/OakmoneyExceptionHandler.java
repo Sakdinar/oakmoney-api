@@ -65,7 +65,7 @@ public class OakmoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler( { DataIntegrityViolationException.class } )
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
 			WebRequest request) {
-		String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null,
+		String mensagemUsuario = messageSource.getMessage("recurso.operacao-nao-permitida", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = ExceptionUtils.getRootCause(ex).toString();
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
