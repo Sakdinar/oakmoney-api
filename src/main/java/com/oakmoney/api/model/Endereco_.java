@@ -10,6 +10,7 @@ public abstract class Endereco_ {
 
 	public static volatile SingularAttribute<Endereco, String> cidade;
 	public static volatile SingularAttribute<Endereco, String> estado;
+	public static volatile SingularAttribute<Endereco, String> complemento;
 	public static volatile SingularAttribute<Endereco, Long> numero;
 	public static volatile SingularAttribute<Endereco, String> logradouro;
 	public static volatile SingularAttribute<Endereco, String> bairro;
