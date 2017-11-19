@@ -39,7 +39,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		clients.inMemory().withClient("angular").secret("angular").scopes("read", "write")
 				.authorizedGrantTypes("password", "refresh_token")
 				.accessTokenValiditySeconds(oakmoneyApiProperty.getSeguranca().getAccessTokenValiditySeconds())
-				.refreshTokenValiditySeconds(3600 * 24);
+				.refreshTokenValiditySeconds(1770);
 	}
 
 	/**
